@@ -56,6 +56,7 @@ public class RoadEventService {
 	
 	public void output(Dc object) {		
 		try {
+			String content = this.xmlMapper.writeValueAsString(object);
 			File outputD = new File(new URI(outputFolder));
 			if (!outputD.exists()) {
 				outputD.mkdirs();
@@ -70,7 +71,7 @@ public class RoadEventService {
 			String prefix = sdf1.format(new Date());
 			File outputfile =new File(dateD,prefix+".xml");
 			
-			FileUtils.writeStringToFile(outputfile, "test");
+			FileUtils.writeStringToFile(outputfile, content);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
