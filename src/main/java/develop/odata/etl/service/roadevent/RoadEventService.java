@@ -56,8 +56,14 @@ public class RoadEventService {
 	
 	public void output(Dc object) {		
 		try {
-			String content = this.xmlMapper.writeValueAsString(object);
-			File outputD = new File(new URI(outputFolder));
+			String content = null;
+			if(object != null ) {
+				content = this.xmlMapper.writeValueAsString(object);
+			}else {
+				content = "test";
+			}
+			 
+			File outputD = new File( outputFolder );
 			if (!outputD.exists()) {
 				outputD.mkdirs();
 			}
@@ -72,9 +78,7 @@ public class RoadEventService {
 			File outputfile =new File(dateD,prefix+".xml");
 			
 			FileUtils.writeStringToFile(outputfile, content);
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		}  catch (IOException e) {
 			e.printStackTrace();
 		}		
 	}
@@ -84,8 +88,10 @@ public class RoadEventService {
 	 * https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html
 	 */
 	@Scheduled(cron="* */10 * * * *")
+//	@Scheduled(cron="*/10 * * * * *")
 	public void dailyJob() {
 		Dc data =  getRoadEvent();
 		output(data);
+//		output(null);
 	}
 }
