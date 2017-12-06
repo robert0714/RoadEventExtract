@@ -1,5 +1,8 @@
 package develop.odata.etl.model.roadevent;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlCData;
@@ -15,9 +18,13 @@ public class Record {
 	private String keytime;
 	private String status;
 	private String region;
-	private String updatetime;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
+	private Date updatetime;
 	private String roadtype;
-	private String happentime;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
+	private Date happentime;
 	private String continuetime;
 
 	@JacksonXmlProperty(localName = "Direction")
@@ -119,11 +126,11 @@ public class Record {
 		this.region = region;
 	}
 
-	public String getUpdatetime() {
+	public Date getUpdatetime() {
 		return updatetime;
 	}
 
-	public void setUpdatetime(String updatetime) {
+	public void setUpdatetime(Date updatetime) {
 		this.updatetime = updatetime;
 	}
 
@@ -135,11 +142,11 @@ public class Record {
 		this.roadtype = roadtype;
 	}
 
-	public String getHappentime() {
+	public Date getHappentime() {
 		return happentime;
 	}
 
-	public void setHappentime(String happentime) {
+	public void setHappentime(Date happentime) {
 		this.happentime = happentime;
 	}
 

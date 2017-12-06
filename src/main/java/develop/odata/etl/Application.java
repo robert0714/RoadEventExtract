@@ -15,8 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
  
- 
+@EnableScheduling
 @SpringBootApplication
 public class Application   implements CommandLineRunner  {
 
@@ -28,26 +29,7 @@ public class Application   implements CommandLineRunner  {
 
 	@Override
 	public void run(String... args) throws Exception {
-//		
-//		placeService.setApiKey("AIzaSyDi8JIfB0JBBgr830O1hyezWy0Uuj0ncOI"); 
-//		String placeId =  "EigyNTHlj7DngaPmlrDljJfluILmt6HmsLTljYDkuK3lsbHot6846Jmf";
-//		PlaceDetails place = placeService.getPlaceDetails(placeId,"zh-TW");
-//		
-//		if(!StringUtils.equals(placeId, place.getPlaceId())) {
-//			System.out.println("data Error");
-//		}
-//		 
-// 
-//		PlaceRecord record =new PlaceRecord(place.getPlaceId(),"zh-TW",place,new Date());
-//		
-//		placeService.saveOrUpdate(record); 
-//		 
-//		List<PlaceRecord> data = placeService.findByUpdateTimeGreaterThanEqual(new Date(0l));
-//		
-//		
-//		PlaceRecord testdata = placeService.findById(placeId, "zh-TW");
-//		
-//		System.out.println(data.size());;
+
 		
 	}    
 
