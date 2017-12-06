@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+  ap:
+    container_name: robert-app
+    depends_on:
+      - mongodb
+    image: ${docker.repository.name}:${project.version}
+    volumes:
+      - poi/conf/source/placeIds:/root/poi/conf/source/placeIds
+      - poi/output:/root/poi/output
+    environment:
+      - MONGO_URL=mongodb
+      - EXTRA_OPTS="--lower_case_table_names=1"
+      - TZ=Asia/Taipei
+    ports: 
+      - "8080:8080"    
+  mongodb:
+    container_name: robert-mongodb
+    restart: always
+    image: mongo:latest
+    ports:
+      - "27017:27017"    
+    volumes:
+      - data/mongodb:/data/db
+    environment:
+      - MONGODB_DATABASE=ec
+     
+    
