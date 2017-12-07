@@ -97,62 +97,59 @@ public class RoadEventService {
 		cellEndDate.setCellValue("roadtype");
 		
 		HSSFCell cell6 = row.createCell(6);
-		cell6.setCellValue("roadtype");
+		cell6.setCellValue("happentime");
 		
 		HSSFCell cell7 = row.createCell(7);
-		cell7.setCellValue("happentime");
+		cell7.setCellValue("continuetime");
 		
 		HSSFCell cell8 = row.createCell(8);
-		cell8.setCellValue("continuetime");
+		cell8.setCellValue("speedLow");
 		
 		HSSFCell cell9 = row.createCell(9);
-		cell9.setCellValue("speedLow");
+		cell9.setCellValue("speedTop");
 		
 		HSSFCell cell10 = row.createCell(10);
-		cell10.setCellValue("speedTop");
+		cell10.setCellValue("road1");
 		
 		HSSFCell cell11 = row.createCell(11);
-		cell11.setCellValue("road1");
+		cell11.setCellValue("road2");
 		
 		HSSFCell cell12 = row.createCell(12);
-		cell12.setCellValue("road2");
+		cell12.setCellValue("comment");
 		
 		HSSFCell cell13 = row.createCell(13);
-		cell13.setCellValue("comment");
+		cell13.setCellValue("messageSrc");
 		
 		HSSFCell cell14 = row.createCell(14);
-		cell14.setCellValue("messageSrc");
+		cell14.setCellValue("srcDetail");
 		
 		HSSFCell cell15= row.createCell(15);
-		cell15.setCellValue("srcDetail");
+		cell15.setCellValue("canceltime");
 		
 		HSSFCell cell16 = row.createCell(16);
-		cell16.setCellValue("canceltime");
+		cell16.setCellValue("gps-x1");
 		
 		HSSFCell cell17 = row.createCell(17);
-		cell17.setCellValue("gps-x1");
+		cell17.setCellValue("gps-y1");
 		
 		HSSFCell cell18 = row.createCell(18);
-		cell18.setCellValue("gps-y1");
+		cell18.setCellValue("twd67X1");
 		
 		HSSFCell cell19 = row.createCell(19);
-		cell19.setCellValue("twd67X1");
+		cell19.setCellValue("twd67Y1");
 		
 		HSSFCell cell20 = row.createCell(20);
-		cell20.setCellValue("twd67Y1");
+		cell20.setCellValue("name");
 		
 		HSSFCell cell21 = row.createCell(21);
-		cell21.setCellValue("name");
-		
-		HSSFCell cell22 = row.createCell(22);
-		cell22.setCellValue("level");
+		cell21.setCellValue("level");
+		 
 		int i = 0;
 		for(Record r : object.getRecord()) {
 			++i;
 			HSSFRow eachRow = sheet.createRow(i);
 			
-			HSSFCell cell0= eachRow.createCell(0);
-			cell0.setCellValue(r.getNumber());			
+			HSSFCell cell0= eachRow.createCell(0);cell0.setCellValue(r.getNumber());			
 			HSSFCell cell1= eachRow.createCell(1); cell1.setCellValue(r.getKeytime());
 			HSSFCell cell2= eachRow.createCell(2); cell2.setCellValue(r.getStatus());
 			HSSFCell cell3= eachRow.createCell(3); cell3.setCellValue(r.getRegion());
