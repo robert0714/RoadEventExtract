@@ -15,7 +15,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-
+import org.apache.poi.ss.usermodel.CellType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -153,9 +153,13 @@ public class RoadEventService {
 			HSSFCell cell1= eachRow.createCell(1); cell1.setCellValue(r.getKeytime());
 			HSSFCell cell2= eachRow.createCell(2); cell2.setCellValue(r.getStatus());
 			HSSFCell cell3= eachRow.createCell(3); cell3.setCellValue(r.getRegion());
-			HSSFCell cell4= eachRow.createCell(4); cell4.setCellValue(r.getUpdatetime());
+			
+			HSSFCell cell4= eachRow.createCell(4); cell4.setCellType(CellType.STRING); cell4.setCellValue(sdf.format(r.getUpdatetime()));
+			
 			HSSFCell cell5= eachRow.createCell(5); cell5.setCellValue(r.getRoadtype());
-			HSSFCell celle6= eachRow.createCell(6); celle6.setCellValue(r.getHappentime());
+			
+			HSSFCell celle6= eachRow.createCell(6); celle6.setCellValue(sdf.format(r.getHappentime()));
+			
 			HSSFCell celle7= eachRow.createCell(7); celle7.setCellValue(r.getContinuetime());
 			HSSFCell celle8= eachRow.createCell(8); celle8.setCellValue(r.getSpeedLow());
 			HSSFCell celle9= eachRow.createCell(9); celle9.setCellValue(r.getSpeedTop());
@@ -197,7 +201,7 @@ public class RoadEventService {
 			
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 			String prefix = sdf1.format(new Date());
-			File outputfile =new File(dateD,prefix+".xlsx");
+			File outputfile =new File(dateD,prefix+".xls");
 			
 //			FileUtils.writeStringToFile(outputfile, content);
 			
@@ -220,8 +224,8 @@ public class RoadEventService {
 	 * Daily job.
 	 * https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html
 	 */
-//	@Scheduled(cron="* */5 * * * *")
-	@Scheduled(cron="*/10 * * * * *")
+	@Scheduled(cron="* */5 * * * *")
+//	@Scheduled(cron="*/10 * * * * *")
 	public void dailyJob() {
 		Dc data =  getRoadEvent();
 		output(data);
