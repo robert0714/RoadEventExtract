@@ -71,7 +71,7 @@ public class RoadEventService {
 		List<Record> totalList = new LinkedList<>();
 		final Record[] src = object.getRecord();
 		for(Record r :src ) {
-			if(StringUtils.equals("北部", r.getArea())||StringUtils.equals("A", r.getArea())) {
+			if(StringUtils.contains( r.getRegion(), "北部") ||StringUtils.contains( r.getRegion() , "A" )) {
 				totalList.add(r);
 			}
 		}
@@ -97,7 +97,7 @@ public class RoadEventService {
 			
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 			String prefix = sdf1.format(new Date());
-			File outputfile =new File(dateD,prefix+".csv");
+			File outputfile =new File(dateD,prefix+".json");
 			
 			FileUtils.writeStringToFile(outputfile, content);
 		}  catch (IOException e) {
@@ -109,8 +109,8 @@ public class RoadEventService {
 	 * Daily job.
 	 * https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html
 	 */
-	@Scheduled(cron="* */10 * * * *")
-//	@Scheduled(cron="*/10 * * * * *")
+//	@Scheduled(cron="* */5 * * * *")
+	@Scheduled(cron="*/10 * * * * *")
 	public void dailyJob() {
 		Dc data =  getRoadEvent();
 		output(data);
