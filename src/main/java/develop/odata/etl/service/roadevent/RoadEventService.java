@@ -2,24 +2,20 @@ package develop.odata.etl.service.roadevent;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
+import java.io.IOException; 
+import java.text.SimpleDateFormat; 
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.ArrayUtils;
+ 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -78,7 +74,8 @@ public class RoadEventService {
 	}
 	public HSSFSheet convertLine(final Dc object,HSSFWorkbook wb ) {
 		SimpleDateFormat sdf =new  SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		final HSSFSheet sheet = wb.createSheet(sdf.format(object.getDate()));
+		SimpleDateFormat sdf1 =new  SimpleDateFormat("yyyy-MM-dd HH_mm_ss");
+		final HSSFSheet sheet = wb.createSheet(sdf1.format(object.getDate()));
 		HSSFRow row = sheet.createRow(0);
 
 		HSSFCell cellTitle = row.createCell(0);
@@ -155,8 +152,7 @@ public class RoadEventService {
 			HSSFRow eachRow = sheet.createRow(i);
 			
 			HSSFCell cell0= eachRow.createCell(0);
-			cell0.setCellValue(r.getNumber());
-			
+			cell0.setCellValue(r.getNumber());			
 			HSSFCell cell1= eachRow.createCell(1); cell1.setCellValue(r.getKeytime());
 			HSSFCell cell2= eachRow.createCell(2); cell2.setCellValue(r.getStatus());
 			HSSFCell cell3= eachRow.createCell(3); cell3.setCellValue(r.getRegion());
