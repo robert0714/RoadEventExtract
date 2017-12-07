@@ -66,8 +66,7 @@ public class RoadEventService {
 	public String getXmlFormObject(Dc object) throws JsonProcessingException {
 		return this.xmlMapper.writeValueAsString(object);
 	}
-	
-	public void output(Dc object) {
+	public void filter(final Dc object) {
 		List<Record> totalList = new LinkedList<>();
 		final Record[] src = object.getRecord();
 		for(Record r :src ) {
@@ -76,7 +75,115 @@ public class RoadEventService {
 			}
 		}
 		object.setRecord(totalList.toArray(new Record[] {}));
-		;
+	}
+	public HSSFSheet convertLine(final Dc object,HSSFWorkbook wb ) {
+		SimpleDateFormat sdf =new  SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		final HSSFSheet sheet = wb.createSheet(sdf.format(object.getDate()));
+		HSSFRow row = sheet.createRow(0);
+
+		HSSFCell cellTitle = row.createCell(0);
+		cellTitle.setCellValue("number");
+
+		HSSFCell cellDescription = row.createCell(1);
+		cellDescription.setCellValue("keytime");
+
+		HSSFCell cellAuthor = row.createCell(2);
+		cellAuthor.setCellValue("status");
+
+		HSSFCell cellPubDate = row.createCell(3);
+		cellPubDate.setCellValue("region");
+
+		HSSFCell cellStartDate = row.createCell(4);
+		cellStartDate.setCellValue("updatetime");
+
+		HSSFCell cellEndDate = row.createCell(5);
+		cellEndDate.setCellValue("roadtype");
+		
+		HSSFCell cell6 = row.createCell(6);
+		cell6.setCellValue("roadtype");
+		
+		HSSFCell cell7 = row.createCell(7);
+		cell7.setCellValue("happentime");
+		
+		HSSFCell cell8 = row.createCell(8);
+		cell8.setCellValue("continuetime");
+		
+		HSSFCell cell9 = row.createCell(9);
+		cell9.setCellValue("speedLow");
+		
+		HSSFCell cell10 = row.createCell(10);
+		cell10.setCellValue("speedTop");
+		
+		HSSFCell cell11 = row.createCell(11);
+		cell11.setCellValue("road1");
+		
+		HSSFCell cell12 = row.createCell(12);
+		cell12.setCellValue("road2");
+		
+		HSSFCell cell13 = row.createCell(13);
+		cell13.setCellValue("comment");
+		
+		HSSFCell cell14 = row.createCell(14);
+		cell14.setCellValue("messageSrc");
+		
+		HSSFCell cell15= row.createCell(15);
+		cell15.setCellValue("srcDetail");
+		
+		HSSFCell cell16 = row.createCell(16);
+		cell16.setCellValue("canceltime");
+		
+		HSSFCell cell17 = row.createCell(17);
+		cell17.setCellValue("gps-x1");
+		
+		HSSFCell cell18 = row.createCell(18);
+		cell18.setCellValue("gps-y1");
+		
+		HSSFCell cell19 = row.createCell(19);
+		cell19.setCellValue("twd67X1");
+		
+		HSSFCell cell20 = row.createCell(20);
+		cell20.setCellValue("twd67Y1");
+		
+		HSSFCell cell21 = row.createCell(21);
+		cell21.setCellValue("name");
+		
+		HSSFCell cell22 = row.createCell(22);
+		cell22.setCellValue("level");
+		int i = 0;
+		for(Record r : object.getRecord()) {
+			++i;
+			HSSFRow eachRow = sheet.createRow(i);
+			
+			HSSFCell cell0= eachRow.createCell(0);
+			cell0.setCellValue(r.getNumber());
+			
+			HSSFCell cell1= eachRow.createCell(1); cell1.setCellValue(r.getKeytime());
+			HSSFCell cell2= eachRow.createCell(2); cell2.setCellValue(r.getStatus());
+			HSSFCell cell3= eachRow.createCell(3); cell3.setCellValue(r.getRegion());
+			HSSFCell cell4= eachRow.createCell(4); cell4.setCellValue(r.getUpdatetime());
+			HSSFCell cell5= eachRow.createCell(5); cell5.setCellValue(r.getRoadtype());
+			HSSFCell celle6= eachRow.createCell(6); celle6.setCellValue(r.getHappentime());
+			HSSFCell celle7= eachRow.createCell(7); celle7.setCellValue(r.getContinuetime());
+			HSSFCell celle8= eachRow.createCell(8); celle8.setCellValue(r.getSpeedLow());
+			HSSFCell celle9= eachRow.createCell(9); celle9.setCellValue(r.getSpeedTop());
+			HSSFCell celle10= eachRow.createCell(10); celle10.setCellValue(r.getRoad1());
+			HSSFCell celle11= eachRow.createCell(11); celle11.setCellValue(r.getRoad2());
+			HSSFCell celle12= eachRow.createCell(12); celle12.setCellValue(r.getComment());
+			HSSFCell celle13= eachRow.createCell(13); celle13.setCellValue(r.getMessageSrc());
+			HSSFCell celle14= eachRow.createCell(14); celle14.setCellValue(r.getSrcDetail());
+			HSSFCell celle15= eachRow.createCell(15); celle15.setCellValue(r.getCanceltime());
+			HSSFCell celle16= eachRow.createCell(16); celle16.setCellValue(r.getGps().getX1());
+			HSSFCell celle17= eachRow.createCell(17); celle17.setCellValue(r.getGps().getY1());
+			HSSFCell celle18= eachRow.createCell(18); celle18.setCellValue(r.getTwd67().getTwd67X1());
+			HSSFCell celle19= eachRow.createCell(19); celle19.setCellValue(r.getTwd67().getTwd67Y1());
+			HSSFCell celle20= eachRow.createCell(20); celle20.setCellValue(r.getName());
+			HSSFCell celle21= eachRow.createCell(21); celle21.setCellValue(r.getLevel());
+
+		}
+		return sheet;
+	}
+	public void output(Dc object) {
+		filter(object);		
 		try {
 			String content = null;
 			if(object != null ) {
@@ -97,9 +204,20 @@ public class RoadEventService {
 			
 			SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 			String prefix = sdf1.format(new Date());
-			File outputfile =new File(dateD,prefix+".json");
+			File outputfile =new File(dateD,prefix+".xlsx");
 			
-			FileUtils.writeStringToFile(outputfile, content);
+//			FileUtils.writeStringToFile(outputfile, content);
+			
+			if(object == null ) {
+				return;
+			}
+			try (HSSFWorkbook wb = new HSSFWorkbook(); FileOutputStream fileOut = new FileOutputStream(outputfile);) {
+				convertLine(object, wb);
+				// write this workbook to an Outputstream.
+				wb.write(fileOut);
+				fileOut.flush();
+			}
+			
 		}  catch (IOException e) {
 			e.printStackTrace();
 		}		
