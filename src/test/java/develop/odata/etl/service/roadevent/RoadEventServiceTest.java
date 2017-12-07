@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
@@ -19,6 +20,7 @@ public class RoadEventServiceTest {
 
 	private RoadEventService service;
 
+	private  ObjectMapper mapper;
 	private XmlMapper xmlMapper;
 
 	boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
@@ -30,6 +32,7 @@ public class RoadEventServiceTest {
 		module.setDefaultUseWrapper(false);
 		this.xmlMapper = new XmlMapper(module);
 		// this.xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
+		this.mapper= new ObjectMapper();
 	}
 
 	@After
@@ -37,9 +40,8 @@ public class RoadEventServiceTest {
 	}
 
 	@Test
-//	@Ignore
+	@Ignore
 	public void testReadXml() throws Exception {
-
 		String resource = "/RoadData_LC.xml";
 		String xml = new String(Files.readAllBytes(Paths.get(getClass().getResource(resource).toURI())));
 		System.out.println(xml);
@@ -48,6 +50,15 @@ public class RoadEventServiceTest {
 
 		System.out.println(object);
 		;
+	}
+	@Test
+//	@Ignore
+	public void testReadXmlExportJson() throws Exception {
+		String resource = "/RoadData_LC.xml";
+		String xml = new String(Files.readAllBytes(Paths.get(getClass().getResource(resource).toURI())));		 
+		Dc object = this.xmlMapper.readValue(xml, Dc.class);
+		final String json = this.mapper.writeValueAsString(object);		
+		System.out.println(json);
 	}
 
 	@Test
@@ -63,6 +74,15 @@ public class RoadEventServiceTest {
 		System.out.println(object);
 		;
 	}
+	@Test
+	@Ignore
+	public void testReadXml2ExportJson() throws Exception {
+		String resource = "/RoadData_LC_data_set.xml";
+		String xml = new String(Files.readAllBytes(Paths.get(getClass().getResource(resource).toURI())));		
+		RoadData object = this.xmlMapper.readValue(xml, RoadData.class);
+		final String json = this.mapper.writeValueAsString(object);		
+		System.out.println(json);
+	}
 
 	@Test
 	@Ignore
@@ -73,6 +93,18 @@ public class RoadEventServiceTest {
 		Record object = this.xmlMapper.readValue(xml, Record.class);
 
 		System.out.println(object);
+		;
+	}
+	 
+	@Test
+	@Ignore
+	public void testReadXml3ExportJson() throws Exception {
+		String resource = "/RoadData_LC_data_unit.xml";
+		String xml = new String(Files.readAllBytes(Paths.get(getClass().getResource(resource).toURI())));
+		
+		Record object = this.xmlMapper.readValue(xml, Record.class);
+		final String json = this.mapper.writeValueAsString(object);		
+		System.out.println(json);
 		;
 	}
 
