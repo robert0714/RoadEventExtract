@@ -2,6 +2,7 @@ package develop.odata.etl.endpoint.roadevent;
  
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.After;
@@ -13,10 +14,15 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate; 
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import develop.odata.etl.Application;
 import develop.odata.etl.domain.roadevent.Record;
@@ -60,8 +66,17 @@ public class RoadEventEndpointTest {
 	@Test
 	public void testRecord() throws Exception {
 		String uri="/roadEvent/";
-		 	
-		ResponseEntity<String> response = this.restTemplate.getForEntity(new URI(uri),  String.class);	
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_XML);
+		List<MediaType> act =new ArrayList<>();
+		act.add(MediaType.APPLICATION_XML);
+		headers.setAccept(act);
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+		map.add("Accept", MediaType.APPLICATION_XML_VALUE);//廠商所提供的json字串一定要大寫。 
+		HttpEntity<MultiValueMap<String, String>> request = 
+				new HttpEntity<MultiValueMap<String, String>>(map, headers);
+		ResponseEntity<String> response = this.restTemplate.getForEntity(uri,  String.class);	
 		System.out.println(response.getBody());;
 		Assert.assertEquals("[{\"comment\":\"光復南路與信義路的交叉路口.號誌異常 光復閃黃 信義閃紅\",\"name\":\"燈號不正常\",\"gpsX1\":\"121.55738\",\"gpsY1\":\"25.03321\"}]", response.getBody());
 	} 

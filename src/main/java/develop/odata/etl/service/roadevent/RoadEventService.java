@@ -269,7 +269,20 @@ public class RoadEventService {
 	}
 	public List<develop.odata.etl.domain.roadevent.Record> findAll() {
 		List<develop.odata.etl.domain.roadevent.Record> result =new ArrayList<>();
-		
+		 
+//		develop.odata.etl.domain.roadevent.Record sample =new develop.odata.etl.domain.roadevent.Record ();
+//		sample.setComment("光復南路與信義路的交叉路口.號誌異常 光復閃黃 信義閃紅");
+//		sample.setGpsX1("121.55738");
+//		sample.setGpsY1("25.03321");
+//		sample.setName("燈號不正常");
+//		result.add(sample);
+//		develop.odata.etl.domain.roadevent.Record sample1 =new develop.odata.etl.domain.roadevent.Record ();
+//		sample1.setComment("AAAAAAAAAAAAAAA");
+//		sample1.setGpsX1("121.55738");
+//		sample1.setGpsY1("25.03321");
+//		sample1.setName("燈號不正常");
+//		result.add(sample1);
+		//TODO 呼叫DAO
 		return result;
 	}
 }

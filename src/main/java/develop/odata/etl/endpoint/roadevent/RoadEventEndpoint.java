@@ -35,19 +35,19 @@ public class RoadEventEndpoint {
 	/***
 	 * 快取
 	 * */
-	private LoadingCache<String, List<Record>> cacheData = CacheBuilder.newBuilder().maximumSize(1000)
-			.expireAfterAccess(5, TimeUnit.MINUTES).build(new CacheLoader<String, List<Record>>() {
+	private LoadingCache<String, Record[]> cacheData = CacheBuilder.newBuilder().maximumSize(1000)
+			.expireAfterAccess(5, TimeUnit.MINUTES).build(new CacheLoader<String, Record[]>() {
 				@Override
-				public List<Record> load(String searchData) throws Exception {
+				public Record[] load(String searchData) throws Exception {
 					List<Record> result = service.findAll();
 
-					return result;
+					return result.toArray(new Record[] {});
 				}
 			});
 
-	@GetMapping(produces= MediaType.APPLICATION_JSON_VALUE, value = "/")
-	public ResponseEntity<List<Record>> listdata() {
-		List<Record> data = null;
+	@GetMapping(produces= { MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE}, value = "/")
+	public ResponseEntity<Record[]> listdata() {
+		Record[] data = null;
 		try {
 			data = cacheData.get(ALL);
 		} catch (ExecutionException e) {
@@ -55,7 +55,7 @@ public class RoadEventEndpoint {
 			return null;
 		}
 
-		final ResponseEntity<List<Record>> result = new ResponseEntity<List<Record>>(data, HttpStatus.OK);
+		final ResponseEntity<Record[]> result = new ResponseEntity<Record[]>(data, HttpStatus.OK);
 
 		return result;
 	}

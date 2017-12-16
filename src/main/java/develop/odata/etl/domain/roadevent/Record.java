@@ -1,14 +1,42 @@
 package develop.odata.etl.domain.roadevent;
 
 import java.util.Date;
+ 
+import javax.xml.bind.annotation.XmlRootElement;
 
+import org.springframework.hateoas.core.Relation;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude; 
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@XmlRootElement
+@Relation(collectionRelation="record")
 public class Record {
+
+	public Record(String number, Date updatetime, Date happentime, String roadtype, String road1, String comment,
+			String des, String srcDetail, String name, String gpsX1, String gpsY1) {
+		super();
+		this.number = number;
+		this.updatetime = updatetime;
+		this.happentime = happentime;
+		this.roadtype = roadtype;
+		this.road1 = road1;
+		this.comment = comment;
+		this.des = des;
+		this.srcDetail = srcDetail;
+		this.name = name;
+		this.gpsX1 = gpsX1;
+		this.gpsY1 = gpsY1;
+	}
+	
+	@JsonCreator
+	public Record( ) {
+		super(); 
+	}
 
 	// 相當於id
 	private String number;
@@ -27,7 +55,7 @@ public class Record {
 	
 	/**
 	 * 合併road1與comment的資料
-	 * **/
+	 * **/	
 	private String des;
 
 	private String srcDetail;
