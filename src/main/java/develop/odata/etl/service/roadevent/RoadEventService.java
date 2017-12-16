@@ -3,7 +3,8 @@ package develop.odata.etl.service.roadevent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException; 
-import java.text.SimpleDateFormat; 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -230,5 +231,45 @@ public class RoadEventService {
 		Dc data =  getRoadEvent();
 		output(data);
 //		output(null);
+		storePersistent(data);
+		
+	}
+
+
+	protected void storePersistent(Dc data) {
+		List<develop.odata.etl.domain.roadevent.Record> domains = convert(data);
+	}
+	protected List<develop.odata.etl.domain.roadevent.Record> convert(Dc data){
+		List<develop.odata.etl.domain.roadevent.Record> result =new ArrayList<>();
+		Record[] record = data.getRecord();
+		for(Record unit :record ) {
+			develop.odata.etl.domain.roadevent.Record domain = new develop.odata.etl.domain.roadevent.Record();
+			domain.setNumber(unit.getNumber());
+			domain.setName(unit.getName());
+			domain.setComment(unit.getComment());
+			domain.setHappentime(unit.getHappentime());
+			String road1 = unit.getRoad1();
+			
+			if (StringUtils.length(road1) == 1) {
+				road1 = StringUtils.EMPTY;
+			} else if (StringUtils.length(road1) > 1) {
+				road1 = StringUtils.removeEnd(road1, "0");
+			}
+			
+			domain.setRoad1(road1);
+			domain.setDes(road1 + unit.getComment());
+			domain.setRoadtype(unit.getRoadtype());
+			domain.setSrcDetail(unit.getSrcDetail());
+			domain.setUpdatetime(unit.getUpdatetime());
+			domain.setGpsX1(unit.getGps().getX1());
+			domain.setGpsY1(unit.getGps().getY1());
+			result.add(domain);
+		}
+		return result;
+	}
+	public List<develop.odata.etl.domain.roadevent.Record> findAll() {
+		List<develop.odata.etl.domain.roadevent.Record> result =new ArrayList<>();
+		
+		return result;
 	}
 }

@@ -5,10 +5,9 @@ services:
     container_name: robert-app
     depends_on:
       - mongodb
-    image: localhost:5000/robert0714/google-place-mongo:1.0-SNAPSHOT
+    image: localhost:5000/robert0714/road-event-mongo:1.0-SNAPSHOT
     volumes: 
-      - $PWD/poi/conf/source/placeIds:/root/poi/conf/source/placeIds
-      - $PWD/poi/output:/root/poi/output
+      - $PWD/roadEvents/data:/root/roadEvents/data 
     environment:
       - MONGO_URL=mongodb
       - TZ=Asia/Taipei

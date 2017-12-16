@@ -1,0 +1,130 @@
+package develop.odata.etl.domain.roadevent;
+
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Record {
+
+	// 相當於id
+	private String number;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
+	private Date updatetime;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
+	private Date happentime;
+
+	private String roadtype;
+	
+	private String road1;
+	
+	private String comment;
+	
+	/**
+	 * 合併road1與comment的資料
+	 * **/
+	private String des;
+
+	private String srcDetail;
+
+	private String name;
+	
+	private String gpsX1;
+
+	private String gpsY1;
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+	public Date getUpdatetime() {
+		return updatetime;
+	}
+
+	public void setUpdatetime(Date updatetime) {
+		this.updatetime = updatetime;
+	}
+
+	public Date getHappentime() {
+		return happentime;
+	}
+
+	public void setHappentime(Date happentime) {
+		this.happentime = happentime;
+	}
+
+	public String getRoadtype() {
+		return roadtype;
+	}
+
+	public void setRoadtype(String roadtype) {
+		this.roadtype = roadtype;
+	}
+
+	public String getRoad1() {
+		return road1;
+	}
+
+	public void setRoad1(String road1) {
+		this.road1 = road1;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public String getDes() {
+		return des;
+	}
+
+	public void setDes(String des) {
+		this.des = des;
+	}
+
+	public String getSrcDetail() {
+		return srcDetail;
+	}
+
+	public void setSrcDetail(String srcDetail) {
+		this.srcDetail = srcDetail;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getGpsX1() {
+		return gpsX1;
+	}
+
+	public void setGpsX1(String gpsX1) {
+		this.gpsX1 = gpsX1;
+	}
+
+	public String getGpsY1() {
+		return gpsY1;
+	}
+
+	public void setGpsY1(String gpsY1) {
+		this.gpsY1 = gpsY1;
+	}
+
+	
+}
