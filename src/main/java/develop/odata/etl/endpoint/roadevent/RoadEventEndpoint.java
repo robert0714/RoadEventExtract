@@ -45,7 +45,7 @@ public class RoadEventEndpoint {
 				}
 			});
 
-	@GetMapping(produces= { MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE}, value = "/")
+	@GetMapping(produces= { MediaType.APPLICATION_JSON_VALUE } )
 	public ResponseEntity<Record[]> listdata() {
 		Record[] data = null;
 		try {

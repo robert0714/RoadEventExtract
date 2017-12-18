@@ -17,6 +17,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,6 +31,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import develop.odata.etl.model.roadevent.Dc;
 import develop.odata.etl.model.roadevent.Record;
+import develop.odata.etl.repository.roadevent.RecordRepository;
 
 @Component
 public class RoadEventService {
@@ -43,6 +45,9 @@ public class RoadEventService {
 	
 	@Value("${develop.odata.etl.services.roadEvents.data}")
 	private String outputFolder ;
+	
+	@Autowired
+	private RecordRepository repository ;
 
 	@PostConstruct
 	public void postConstruct() {
@@ -238,6 +243,7 @@ public class RoadEventService {
 
 	protected void storePersistent(Dc data) {
 		List<develop.odata.etl.domain.roadevent.Record> domains = convert(data);
+		repository.save(domains );
 	}
 	protected List<develop.odata.etl.domain.roadevent.Record> convert(Dc data){
 		List<develop.odata.etl.domain.roadevent.Record> result =new ArrayList<>();
@@ -268,8 +274,8 @@ public class RoadEventService {
 		return result;
 	}
 	public List<develop.odata.etl.domain.roadevent.Record> findAll() {
-		List<develop.odata.etl.domain.roadevent.Record> result =new ArrayList<>();
-		 
+		List<develop.odata.etl.domain.roadevent.Record> result =null;
+//		result =new ArrayList<>();
 //		develop.odata.etl.domain.roadevent.Record sample =new develop.odata.etl.domain.roadevent.Record ();
 //		sample.setComment("光復南路與信義路的交叉路口.號誌異常 光復閃黃 信義閃紅");
 //		sample.setGpsX1("121.55738");
@@ -283,6 +289,7 @@ public class RoadEventService {
 //		sample1.setName("燈號不正常");
 //		result.add(sample1);
 		//TODO 呼叫DAO
+		result = repository.findAll();
 		return result;
 	}
 }

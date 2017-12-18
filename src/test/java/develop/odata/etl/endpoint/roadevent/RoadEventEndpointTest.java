@@ -65,17 +65,9 @@ public class RoadEventEndpointTest {
 	}
 	@Test
 	public void testRecord() throws Exception {
-		String uri="/roadEvent/";
+		String uri="/roadEvent";
 		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_XML);
-		List<MediaType> act =new ArrayList<>();
-		act.add(MediaType.APPLICATION_XML);
-		headers.setAccept(act);
-		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-		map.add("Accept", MediaType.APPLICATION_XML_VALUE);//廠商所提供的json字串一定要大寫。 
-		HttpEntity<MultiValueMap<String, String>> request = 
-				new HttpEntity<MultiValueMap<String, String>>(map, headers);
+		
 		ResponseEntity<String> response = this.restTemplate.getForEntity(uri,  String.class);	
 		System.out.println(response.getBody());;
 		Assert.assertEquals("[{\"comment\":\"光復南路與信義路的交叉路口.號誌異常 光復閃黃 信義閃紅\",\"name\":\"燈號不正常\",\"gpsX1\":\"121.55738\",\"gpsY1\":\"25.03321\"}]", response.getBody());
