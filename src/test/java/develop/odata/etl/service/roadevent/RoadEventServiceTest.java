@@ -3,6 +3,7 @@ package develop.odata.etl.service.roadevent;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.apache.commons.io.Charsets;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -43,7 +44,7 @@ public class RoadEventServiceTest {
 	@Ignore
 	public void testReadXml() throws Exception {
 		String resource = "/RoadData_LC.xml";
-		String xml = new String(Files.readAllBytes(Paths.get(getClass().getResource(resource).toURI())));
+		String xml = new String(Files.readAllBytes(Paths.get(getClass().getResource(resource).toURI())),Charsets.UTF_8);
 		System.out.println(xml);
 		 
 		Dc object = this.xmlMapper.readValue(xml, Dc.class);
@@ -55,7 +56,7 @@ public class RoadEventServiceTest {
 //	@Ignore
 	public void testReadXmlExportJson() throws Exception {
 		String resource = "/RoadData_LC.xml";
-		String xml = new String(Files.readAllBytes(Paths.get(getClass().getResource(resource).toURI())));		 
+		String xml = new String(Files.readAllBytes(Paths.get(getClass().getResource(resource).toURI())),Charsets.UTF_8);		 
 		Dc object = this.xmlMapper.readValue(xml, Dc.class);
 		final String json = this.mapper.writeValueAsString(object);		
 		System.out.println(json);
@@ -65,7 +66,7 @@ public class RoadEventServiceTest {
 	@Ignore
 	public void testReadXml2() throws Exception {
 		String resource = "/RoadData_LC_data_set.xml";
-		String xml = new String(Files.readAllBytes(Paths.get(getClass().getResource(resource).toURI())));
+		String xml = new String(Files.readAllBytes(Paths.get(getClass().getResource(resource).toURI())),Charsets.UTF_8);
 		System.out.println(xml);
 		;
 
@@ -78,7 +79,7 @@ public class RoadEventServiceTest {
 	@Ignore
 	public void testReadXml2ExportJson() throws Exception {
 		String resource = "/RoadData_LC_data_set.xml";
-		String xml = new String(Files.readAllBytes(Paths.get(getClass().getResource(resource).toURI())));		
+		String xml = new String(Files.readAllBytes(Paths.get(getClass().getResource(resource).toURI())),Charsets.UTF_8);		
 		RoadData object = this.xmlMapper.readValue(xml, RoadData.class);
 		final String json = this.mapper.writeValueAsString(object);		
 		System.out.println(json);
@@ -88,7 +89,7 @@ public class RoadEventServiceTest {
 	@Ignore
 	public void testReadXml3() throws Exception {
 		String resource = "/RoadData_LC_data_unit.xml";
-		String xml = new String(Files.readAllBytes(Paths.get(getClass().getResource(resource).toURI())));
+		String xml = new String(Files.readAllBytes(Paths.get(getClass().getResource(resource).toURI())),Charsets.UTF_8);
 		System.out.println(xml);
 		Record object = this.xmlMapper.readValue(xml, Record.class);
 
@@ -100,7 +101,7 @@ public class RoadEventServiceTest {
 	@Ignore
 	public void testReadXml3ExportJson() throws Exception {
 		String resource = "/RoadData_LC_data_unit.xml";
-		String xml = new String(Files.readAllBytes(Paths.get(getClass().getResource(resource).toURI())));
+		String xml = new String(Files.readAllBytes(Paths.get(getClass().getResource(resource).toURI())),Charsets.UTF_8);
 		
 		Record object = this.xmlMapper.readValue(xml, Record.class);
 		final String json = this.mapper.writeValueAsString(object);		
