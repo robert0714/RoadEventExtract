@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -242,6 +243,7 @@ public class RoadEventService {
 
 
 	protected void storePersistent(Dc data) {
+		filter(data);		
 		List<develop.odata.etl.domain.roadevent.Record> domains = convert(data);
 		repository.save(domains );
 	}
@@ -269,9 +271,18 @@ public class RoadEventService {
 			domain.setUpdatetime(unit.getUpdatetime());
 			domain.setGpsX1(unit.getGps().getX1());
 			domain.setGpsY1(unit.getGps().getY1());
+			 
 			result.add(domain);
 		}
 		return result;
+	}
+	protected void filterLogic(final  List<develop.odata.etl.domain.roadevent.Record> domains) {
+		final	Iterator<develop.odata.etl.domain.roadevent.Record> iterator = domains.iterator();
+		while(iterator.hasNext()) {
+			develop.odata.etl.domain.roadevent.Record item = iterator.next();
+			
+		}
+		
 	}
 	public List<develop.odata.etl.domain.roadevent.Record> findAll() {
 		List<develop.odata.etl.domain.roadevent.Record> result =null;
