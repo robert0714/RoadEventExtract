@@ -11,5 +11,5 @@ mvn docker:start <br/>
 
 docker run -d  -p 8161:8080     -e "MONGO_URL=192.168.57.111"     localhost:5000/robert0714/road-event-extract:2017-12-18 <br/>
 
- java -jar road-event-extract-1.0-SNAPSHOT.jar  --server.port=8162 --management.port=8163 
+ java -jar road-event-extract-1.0-SNAPSHOT.jar  --server.port=8161 --management.port=8162  --spring.data.mongodb.host=172.21.2.135
  <br/>
