@@ -314,7 +314,10 @@ public class RoadEventService {
 	}
 	
 	public List<develop.odata.etl.domain.roadevent.Record> findToday(){
-		return repository.findByRoadtypeLikeAndDesLikeAndHappentimeBetween("","",null,null);
+	 
+		Date startDate = DateUtils.truncate(new Date(), Calendar.DATE);
+		Date 	endDate = DateUtils.addSeconds(DateUtils.addDays(startDate, 1), -1);
+		return repository.findByRoadtypeLikeAndDesLikeAndHappentimeBetween(StringUtils.EMPTY,StringUtils.EMPTY, startDate,endDate);
 	}
 	public List<develop.odata.etl.domain.roadevent.Record> findAll() {
 		List<develop.odata.etl.domain.roadevent.Record> result =null;

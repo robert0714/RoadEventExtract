@@ -2,6 +2,7 @@ package develop.odata.etl.service.roadevent;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.apache.commons.io.Charsets;
 import org.junit.After;
@@ -56,5 +57,9 @@ public class RoadEventServiceTest2 {
 		service.storePersistent(object);
 	}
 
-	
+	@Test
+	public void testFindToday() throws Exception {
+		List<develop.odata.etl.domain.roadevent.Record> data = service.findToday();
+		System.out.println(data.size());
+	}
 }

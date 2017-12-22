@@ -71,7 +71,7 @@ public class RecordRepositoryTest  {
 		
 		
 		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
-		Date date = sdf.parse("2017-12-08");
+		Date date = sdf.parse("2017-12-07");
 		
 		Date startDate =date;
 		Date endDate =DateUtils.addSeconds(DateUtils.addDays(date, 1), -1);

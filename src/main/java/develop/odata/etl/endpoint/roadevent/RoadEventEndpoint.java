@@ -57,7 +57,7 @@ public class RoadEventEndpoint {
 				}
 			});
 
-	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE } )
+	@RequestMapping(produces = { MediaType.APPLICATION_JSON_VALUE } )
 	public ResponseEntity<Record[]> listdata() {
 		Record[] data = null;
 		try {
@@ -66,13 +66,12 @@ public class RoadEventEndpoint {
 			LOGGER.warn("An exception occurred while " + "fetching place details!", e.getCause());
 			return null;
 		}
-
 		final ResponseEntity<Record[]> result = new ResponseEntity<Record[]>(data, HttpStatus.OK);
 
 		return result;
 	}
 
-	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, value = "/search")
+	@RequestMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, value = "/search")
 	public Slice<Record> search(@RequestParam(value = "rt", defaultValue = "", required = false) String roadtype,
 			@RequestParam(value = "des", defaultValue = "", required = false) String des,
 			@RequestParam(value = "start_date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
