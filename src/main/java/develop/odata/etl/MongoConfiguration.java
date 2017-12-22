@@ -8,16 +8,19 @@ package develop.odata.etl;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
  
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestTemplate; 
 
 @Configuration
-@EnableMongoRepositories(basePackages= {"develop.odata.etl.repository.roadevent"})
+@EnableMongoRepositories(basePackages= {"develop.odata.etl"})
 @EnableAutoConfiguration(exclude = { org.springframework.boot.autoconfigure.web.WebClientAutoConfiguration.class,
 		org.springframework.boot.autoconfigure.context.ConfigurationPropertiesAutoConfiguration.class,
 		org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration.class , 
@@ -42,6 +45,8 @@ public class MongoConfiguration extends AbstractMongoConfiguration {
 	@Bean
 	public RestTemplate getRest() {
 		return new RestTemplate();
-	}
+	} 
+	
+    
 	
 }

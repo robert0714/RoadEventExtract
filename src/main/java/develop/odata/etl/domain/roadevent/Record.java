@@ -4,6 +4,8 @@ import java.util.Date;
  
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.hateoas.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -15,6 +17,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @XmlRootElement
 @Relation(collectionRelation="record")
+//@QueryEntity
+@Document
 public class Record {
 
 	public Record(String number, Date updatetime, Date happentime, String roadtype, String road1, String comment,
@@ -42,6 +46,7 @@ public class Record {
 	private String number;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
+	@JsonIgnoreProperties
 	private Date updatetime;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
@@ -56,6 +61,7 @@ public class Record {
 	/**
 	 * 合併road1與comment的資料
 	 * **/	
+	@Indexed
 	private String des;
 
 	private String srcDetail;

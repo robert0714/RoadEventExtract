@@ -5,13 +5,15 @@ import java.io.FileOutputStream;
 import java.io.IOException; 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
- 
+
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -20,6 +22,8 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -231,7 +235,7 @@ public class RoadEventService {
 	 * Daily job.
 	 * https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html
 	 */
-	@Scheduled(cron="* */5 * * * *")
+//	@Scheduled(cron="* */5 * * * *")
 //	@Scheduled(cron="*/10 * * * * *")
 	public void dailyJob() {
 		Dc data =  getRoadEvent();
@@ -283,6 +287,34 @@ public class RoadEventService {
 			
 		}
 		
+	}
+
+	public Slice<develop.odata.etl.domain.roadevent.Record> find(String roadtype, String des, Date startDate,
+			Date endDate, Pageable pageable) {
+		Slice<develop.odata.etl.domain.roadevent.Record> result = null;
+
+		if (startDate == null) {
+			startDate = new Date();
+		}
+		startDate = DateUtils.truncate(startDate, Calendar.DATE);
+		if (endDate == null) {
+			endDate = DateUtils.addSeconds(DateUtils.addDays(startDate, 1), -1);
+		} else {
+			endDate = DateUtils.addSeconds(DateUtils.addDays(endDate, 1), -1);
+		}
+		if(roadtype==null) {
+			roadtype=StringUtils.EMPTY;
+		}
+		if(des==null) {
+			des=StringUtils.EMPTY;
+		}
+		result = repository.findByRoadtypeLikeAndDesLikeAndHappentimeBetween(roadtype, des, startDate, endDate,
+				pageable);
+		return result;
+	}
+	
+	public List<develop.odata.etl.domain.roadevent.Record> findToday(){
+		return repository.findByRoadtypeLikeAndDesLikeAndHappentimeBetween("","",null,null);
 	}
 	public List<develop.odata.etl.domain.roadevent.Record> findAll() {
 		List<develop.odata.etl.domain.roadevent.Record> result =null;
