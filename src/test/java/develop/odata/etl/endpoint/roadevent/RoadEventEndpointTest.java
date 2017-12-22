@@ -56,7 +56,7 @@ public class RoadEventEndpointTest {
 		sample.setName("燈號不正常");
 		
 		value.add(sample);
-		when(mockService.findAll()).thenReturn(value);
+		when(mockService.findToday()).thenReturn(value);
 		ReflectionTestUtils.setField(endpoint, "service", mockService);
 	}
 
