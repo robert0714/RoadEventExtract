@@ -235,7 +235,7 @@ public class RoadEventService {
 	 * Daily job.
 	 * https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html
 	 */
-//	@Scheduled(cron="* */5 * * * *")
+	@Scheduled(cron="* */5 * * * *")
 //	@Scheduled(cron="*/10 * * * * *")
 	public void dailyJob() {
 		Dc data =  getRoadEvent();

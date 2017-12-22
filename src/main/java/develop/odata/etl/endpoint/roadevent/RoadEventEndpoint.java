@@ -1,6 +1,5 @@
 package develop.odata.etl.endpoint.roadevent;
 
-
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -13,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +24,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-
 
 import develop.odata.etl.domain.roadevent.Record;
 import develop.odata.etl.service.roadevent.RoadEventService;
@@ -71,19 +72,15 @@ public class RoadEventEndpoint {
 		return result;
 	}
 
-	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, value = "/search") 
-	public Slice<Record> search(  @RequestBody(required=false)  RoadEventRequest request,
+	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, value = "/search")
+	public Slice<Record> search(@RequestParam(value = "rt", defaultValue = "", required = false) String roadtype,
+			@RequestParam(value = "des", defaultValue = "", required = false) String des,
+			@RequestParam(value = "start_date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+			@RequestParam(value = "end_date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
 			@PageableDefault(size = 10, page = 0, sort = {
 					"happentime" }, direction = Direction.DESC) Pageable pageable) {
-		Slice<Record> result = null;
-		if(request!=null) {
-			result = service.find(request.getRoadtype(), request.getDes(),
-					request.getStartDate(), request.getEndDate(), pageable);
-		}else {
-			result = service.find(null, null,
-					null,null, pageable);
-		}
-		
+		Slice<Record> result = service.find(roadtype, des, startDate, endDate, pageable);
+
 		return result;
 	}
 }
