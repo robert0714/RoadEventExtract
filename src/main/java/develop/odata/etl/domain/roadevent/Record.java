@@ -4,6 +4,7 @@ import java.util.Date;
  
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.hateoas.core.Relation;
@@ -43,6 +44,7 @@ public class Record {
 	}
 
 	// 相當於id
+	@Id
 	private String number;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
