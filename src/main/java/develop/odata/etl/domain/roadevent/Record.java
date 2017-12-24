@@ -11,11 +11,12 @@ import org.springframework.hateoas.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude; 
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true,value= {"updatetime"})
 @XmlRootElement
 @Relation(collectionRelation="record")
 //@QueryEntity
@@ -48,7 +49,7 @@ public class Record {
 	private String number;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
-	@JsonIgnoreProperties
+	@JsonIgnore
 	private Date updatetime;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
@@ -61,7 +62,7 @@ public class Record {
 	private String comment;
 	
 	/**
-	 * 合併road1與comment的資料
+	 * 合併road1與comment的資料updatetime
 	 * **/	
 	@Indexed
 	private String des;
@@ -81,7 +82,7 @@ public class Record {
 	public void setNumber(String number) {
 		this.number = number;
 	}
-
+	@JsonIgnore
 	public Date getUpdatetime() {
 		return updatetime;
 	}

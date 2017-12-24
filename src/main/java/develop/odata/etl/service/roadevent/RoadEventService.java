@@ -312,12 +312,23 @@ public class RoadEventService {
 				pageable);
 		return result;
 	}
-	
+	public void filterNormal(final List<develop.odata.etl.domain.roadevent.Record> tmpdata) {
+		final Iterator<develop.odata.etl.domain.roadevent.Record> it = tmpdata.iterator();
+		
+		while (it.hasNext()) {
+			final develop.odata.etl.domain.roadevent.Record unit = it.next();
+			if(StringUtils.equals("正常", unit.getRoadtype())) {
+				it.remove();
+			}
+		}
+	} 
 	public List<develop.odata.etl.domain.roadevent.Record> findToday(){
 	 
 		Date startDate = DateUtils.truncate(new Date(), Calendar.DATE);
 		Date 	endDate = DateUtils.addSeconds(DateUtils.addDays(startDate, 1), -1);
-		return repository.findByRoadtypeLikeAndDesLikeAndHappentimeBetween(StringUtils.EMPTY,StringUtils.EMPTY, startDate,endDate);
+		List<develop.odata.etl.domain.roadevent.Record> tmpdata = repository.findByRoadtypeLikeAndDesLikeAndHappentimeBetween(StringUtils.EMPTY,StringUtils.EMPTY, startDate,endDate);
+		filterNormal(tmpdata);
+		return tmpdata;
 	}
 	public List<develop.odata.etl.domain.roadevent.Record> findAll() {
 		List<develop.odata.etl.domain.roadevent.Record> result =null;
@@ -336,6 +347,7 @@ public class RoadEventService {
 //		result.add(sample1);
 		//TODO 呼叫DAO
 		result = repository.findAll();
+		filterNormal(result);
 		return result;
 	}
 }
