@@ -10,14 +10,17 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.CacheControl; 
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;  
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping; 
 import org.springframework.web.bind.annotation.RequestParam; 
 import org.springframework.web.bind.annotation.RestController;
@@ -58,7 +61,8 @@ public class RoadEventEndpoint {
 					return result.toArray(new Record[] {});
 				}
 			});
- 
+//	@CrossOrigin(origins = {"http://localhost:8081"})
+	@CrossOrigin(origins = {"*"})
 	@RequestMapping(produces = { MediaType.APPLICATION_JSON_VALUE } )
 	public ResponseEntity<Record[]> listdata() {
 		Record[] data = null;
@@ -78,6 +82,8 @@ public class RoadEventEndpoint {
 		return result;
 	}
 
+//	@CrossOrigin(origins = {"http://localhost:8081"})
+	@CrossOrigin(origins = {"*"})
 	@RequestMapping(produces = { MediaType.APPLICATION_JSON_VALUE }, value = "/search")
 	public ResponseEntity<Slice<Record>> search(@RequestParam(value = "rt", defaultValue = "", required = false) String roadtype,
 			@RequestParam(value = "des", defaultValue = "", required = false) String des,
@@ -94,7 +100,13 @@ public class RoadEventEndpoint {
 		 */
 		final	CacheControl cc = CacheControl.maxAge(5l,TimeUnit.MINUTES);
 		
-		final ResponseEntity<Slice<Record>> result = ResponseEntity.ok().cacheControl(cc).body(data);
+		final ResponseEntity<Slice<Record>> result = 
+				ResponseEntity.ok().
+				cacheControl(cc).
+//				header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://localhost:8081").
+				header(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "86400").
+				header(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET,POST").
+				body(data);
 		 
 		
 		return result;
