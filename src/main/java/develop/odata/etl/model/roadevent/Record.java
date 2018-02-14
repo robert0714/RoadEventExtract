@@ -19,11 +19,11 @@ public class Record {
 	private String status;
 	private String region;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	private Date updatetime;
 	private String roadtype;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	private Date happentime;
 	private String continuetime;
 

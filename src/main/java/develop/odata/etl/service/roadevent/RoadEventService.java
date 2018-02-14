@@ -12,35 +12,39 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-
-import org.apache.commons.lang.time.DateUtils;
+ 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable; 
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-
+ 
 import develop.odata.etl.model.roadevent.Dc;
 import develop.odata.etl.model.roadevent.Record;
 import develop.odata.etl.repository.roadevent.RecordRepository;
 
 @Component
 public class RoadEventService {
-
+	/** The logger. */
+	private final Logger LOGGER = LoggerFactory.getLogger(RoadEventService.class);
 	private ObjectMapper xmlMapper;
 	private ObjectMapper objectMapper;
 
@@ -65,8 +69,16 @@ public class RoadEventService {
 	}
 
 	public Dc getRoadEvent() {
-		ResponseEntity<Dc> response = restTemplate.getForEntity(resourceUrl, Dc.class);
-		Dc body = response.getBody();
+		Dc body = null;
+		
+		try {
+			ResponseEntity<Dc> response = restTemplate.getForEntity(resourceUrl, Dc.class);
+			body = response.getBody();
+		} catch (RestClientException e) {
+			LOGGER.error(e.getMessage(),e);
+			
+		}
+		
 		return body;
 	}
 
@@ -74,6 +86,9 @@ public class RoadEventService {
 		return this.xmlMapper.writeValueAsString(object);
 	}
 	public void filter(final Dc object) {
+		if(object==null) {
+			return;
+		}
 		List<Record> totalList = new LinkedList<>();
 		final Record[] src = object.getRecord();
 		for(Record r :src ) {
@@ -226,27 +241,32 @@ public class RoadEventService {
 				fileOut.flush();
 			}
 			
-		}  catch (IOException e) {
-			e.printStackTrace();
-		}		
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+		}	
 	}
 	
 	/**
 	 * Daily job.
 	 * https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html
 	 */
-	@Scheduled(cron="* */5 * * * *")
-//	@Scheduled(cron="*/10 * * * * *")
+	@Scheduled(cron="* */5 * * * *") 
 	public void dailyJob() {
 		Dc data =  getRoadEvent();
-		output(data);
+//		output(data);
 //		output(null);
 		storePersistent(data);
-		
 	}
 
 
 	protected void storePersistent(Dc data) {
+		if (data == null) {
+			LOGGER.error("抓取失敗");
+			return ;
+		}else {
+			LOGGER.info("抓取資料成功");
+		}
+
 		filter(data);		
 		List<develop.odata.etl.domain.roadevent.Record> domains = convert(data);
 		repository.save(domains );
@@ -289,9 +309,9 @@ public class RoadEventService {
 		
 	}
 
-	public Slice<develop.odata.etl.domain.roadevent.Record> find(String roadtype, String des, Date startDate,
+	public Page<develop.odata.etl.domain.roadevent.Record> find(String roadtype, String des, Date startDate,
 			Date endDate, Pageable pageable) {
-		Slice<develop.odata.etl.domain.roadevent.Record> result = null;
+		Page<develop.odata.etl.domain.roadevent.Record> result = null;
 
 		if (startDate == null) {
 			startDate = new Date();
@@ -303,15 +323,16 @@ public class RoadEventService {
 			endDate = DateUtils.addSeconds(DateUtils.addDays(endDate, 1), -1);
 		}
 		if(roadtype==null) {
-			roadtype=StringUtils.EMPTY;
+			roadtype=".";
 		}
-		if(des==null) {
+		if(StringUtils.isBlank(des) ) {
 			des=StringUtils.EMPTY;
 		}
-		result = repository.findByRoadtypeLikeAndDesLikeAndHappentimeBetween(roadtype, des, startDate, endDate,
+		result = repository.findByRoadtypeRegexAndDesRegexAndHappentimeBetween(roadtype, des, startDate, endDate,
 				pageable);
 		return result;
 	}
+	 
 	public void filterNormal(final List<develop.odata.etl.domain.roadevent.Record> tmpdata) {
 		final Iterator<develop.odata.etl.domain.roadevent.Record> it = tmpdata.iterator();
 		
@@ -326,26 +347,16 @@ public class RoadEventService {
 	 
 		Date startDate = DateUtils.truncate(new Date(), Calendar.DATE);
 		Date 	endDate = DateUtils.addSeconds(DateUtils.addDays(startDate, 1), -1);
-		List<develop.odata.etl.domain.roadevent.Record> tmpdata = repository.findByRoadtypeLikeAndDesLikeAndHappentimeBetween(StringUtils.EMPTY,StringUtils.EMPTY, startDate,endDate);
+		List<develop.odata.etl.domain.roadevent.Record> tmpdata = repository.findByHappentimeBetween( startDate,endDate);
+		LOGGER.info("today size: {}" , tmpdata.size());
 		filterNormal(tmpdata);
+		LOGGER.info("After filtering ,today size: {}" , tmpdata.size());
+
 		return tmpdata;
 	}
 	public List<develop.odata.etl.domain.roadevent.Record> findAll() {
 		List<develop.odata.etl.domain.roadevent.Record> result =null;
-//		result =new ArrayList<>();
-//		develop.odata.etl.domain.roadevent.Record sample =new develop.odata.etl.domain.roadevent.Record ();
-//		sample.setComment("光復南路與信義路的交叉路口.號誌異常 光復閃黃 信義閃紅");
-//		sample.setGpsX1("121.55738");
-//		sample.setGpsY1("25.03321");
-//		sample.setName("燈號不正常");
-//		result.add(sample);
-//		develop.odata.etl.domain.roadevent.Record sample1 =new develop.odata.etl.domain.roadevent.Record ();
-//		sample1.setComment("AAAAAAAAAAAAAAA");
-//		sample1.setGpsX1("121.55738");
-//		sample1.setGpsY1("25.03321");
-//		sample1.setName("燈號不正常");
-//		result.add(sample1);
-		//TODO 呼叫DAO
+
 		result = repository.findAll();
 		filterNormal(result);
 		return result;

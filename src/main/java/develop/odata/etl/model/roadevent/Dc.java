@@ -14,7 +14,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Dc {
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	@JacksonXmlProperty(localName = "dc.date")
 	private Date date;
 
@@ -24,7 +24,7 @@ public class Dc {
 	@JacksonXmlProperty(localName = "dc.title")
 	private String title;
 
-	@JacksonXmlElementWrapper(localName = "Road_data", useWrapping = true)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	@JacksonXmlProperty(localName = "Record")
 	private Record[] record;
 

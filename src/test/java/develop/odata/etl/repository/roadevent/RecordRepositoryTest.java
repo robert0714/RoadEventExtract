@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.Charsets;
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;

@@ -15,8 +15,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude; 
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonIgnoreProperties(ignoreUnknown = true,value= {"updatetime"})
+//由於roadType變回正常時，name會變成空字串，如果使用JsonInclude.Include.NON_EMPTY，屬性name會整筆消失
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true,value= {"updatetime","road1","comment"})
 @XmlRootElement
 @Relation(collectionRelation="record")
 //@QueryEntity
@@ -48,11 +49,11 @@ public class Record {
 	@Id
 	private String number;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss", locale = "zh", timezone = "GMT+8")	
 	@JsonIgnore
 	private Date updatetime;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	private Date happentime;
 
 	private String roadtype;
