@@ -19,6 +19,6 @@ public interface RecordRepository extends MongoRepository<Record, String>, Query
 	
 	Page<Record>  findByRoadtypeRegexAndDesRegexAndHappentimeBetween (String roadtype,String des , Date d1,Date d2,Pageable pageable);
 	List<Record>  findByRoadtypeRegexAndDesLikeAndHappentimeBetween (String roadtype,String des , Date d1,Date d2 );
-	List<Record>  findByHappentimeBetween (Date d1,Date d2 );
+	List<Record>  findByHappentimeBetweenOrderByHappentimeDesc (Date d1,Date d2 );
 	
 }
