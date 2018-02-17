@@ -24,7 +24,7 @@ public class Dc {
 	@JacksonXmlProperty(localName = "dc.title")
 	private String title;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+	@JacksonXmlElementWrapper(localName = "Road_data", useWrapping = true)
 	@JacksonXmlProperty(localName = "Record")
 	private Record[] record;
 
