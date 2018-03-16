@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.packtpub.mongo.chapter6</groupId>
-	<artifactId>road-event-extract</artifactId>
+	<groupId>com.iisigroup</groupId>
+	<artifactId>road-event</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<properties>
@@ -13,6 +13,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<spring-cloud.version>Dalston.SR5</spring-cloud.version>
+		<spring-boot-admin-starter-client.version>1.5.7</spring-boot-admin-starter-client.version>	
 		<!-- windows要先安裝Docker-toolbox -->
 		<!-- https://download.docker.com/win/stable/DockerToolbox.exe -->
 		<!-- mvn docker:help -->
@@ -91,6 +92,11 @@
 			<artifactId>google-api-client</artifactId>
 			<version>1.23.0</version>
 		</dependency>
+		<dependency>
+			<groupId>de.codecentric</groupId>
+			<artifactId>spring-boot-admin-starter-client</artifactId>
+			<version>${spring-boot-admin-starter-client.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -111,11 +117,6 @@
 						<image>
 							<name>${docker.repository.name}:${timestamp}</name>
 							<alias>${project.artifactId}</alias>
-<!-- 							<external>  -->
-<!-- 							     <type>compose</type>  -->
-<!-- 							     <basedir>src/main/docker</basedir>  -->
-<!-- 							     <composeFile>docker-compose-dev.yml</composeFile> -->
-<!-- 							</external> -->
 							<build>
 								<from>robert0714/oracle-java-8:8u151</from>
 								<maintainer>robert0714</maintainer> 
@@ -142,13 +143,9 @@
 								</ports>
 								<volumes>
 									<bind>
-										<volume>${user.home}/logs:/logs:ro</volume>
+										<volume>${user.home}/logs:/root/logs:ro</volume>
 									</bind>
-								</volumes>
-								<wait>
-									<url>http://${docker.host.address}:${docker.port}/profile/place</url>
-									<time>100000</time>
-								</wait>
+								</volumes>									
 								<log>
 									<prefix>${project.artifactId}</prefix>
 									<color>cyan</color>
@@ -157,83 +154,9 @@
 						</image>
 					</images>
 				</configuration>
-			</plugin>
-			<!-- <plugin> -->
-			<!-- <groupId>org.apache.maven.plugins</groupId> -->
-			<!-- <artifactId>maven-failsafe-plugin</artifactId> -->
-			<!-- <configuration> -->
-			<!-- <phase>integration-test</phase> -->
-			<!-- <groups>com.packtpub.mmj.restaurant.resources.user.DockerIntegrationTest</groups> -->
-			<!-- <systemPropertyVariables> -->
-			<!-- <service.url>http://${docker.host.address}:${docker.port}/</service.url> -->
-			<!-- </systemPropertyVariables> -->
-			<!-- </configuration> -->
-			<!-- <executions> -->
-			<!-- <execution> -->
-			<!-- <goals> -->
-			<!-- <goal>integration-test</goal> -->
-			<!-- <goal>verify</goal> -->
-			<!-- </goals> -->
-			<!-- </execution> -->
-			<!-- </executions> -->
-			<!-- </plugin> -->
-			<!-- <plugin> -->
-			<!-- <groupId>org.apache.maven.plugins</groupId> -->
-			<!-- <artifactId>maven-surefire-plugin</artifactId> -->
-			<!-- <configuration> -->
-			<!-- <excludedGroups>com.packtpub.mmj.user.resources.docker.DockerIntegrationTest</excludedGroups> -->
-			<!-- </configuration> -->
-			<!-- </plugin> -->
-<!-- 			<plugin> -->
-<!-- 				<groupId>org.codehaus.mojo</groupId> -->
-<!-- 				<artifactId>jaxb2-maven-plugin</artifactId> -->
-<!-- 				<version>2.3.1</version> -->
-<!-- 				<executions> -->
-<!-- 					<execution> -->
-<!-- 						<id>xjc-schema1</id> -->
-<!-- 						<goals> -->
-<!-- 							<goal>xjc</goal> -->
-<!-- 						</goals> -->
-<!-- 						<configuration> -->
-<!-- 							Use all XSDs under the schema directory for sources here. -->
-<!-- 							<sources> -->
-<!-- 								<source>src/main/schema</source> -->
-<!-- 							</sources> -->
-
-<!-- 							Package name of the generated sources. -->
-<!-- 							<packageName>develop.odata.etl.model.jaxb</packageName> -->
-<!-- 							<outputDirectory>target/generated-sources/java</outputDirectory> -->
-<!-- 							<addGeneratedAnnotation>true</addGeneratedAnnotation> -->
-<!-- 							<args> -->
-<!-- 								<param>-npa</param> -->
-<!-- 							</args> -->
-<!-- 							<npa>true</npa> -->
-<!-- 							<removeOldOutput>true</removeOldOutput> -->
-<!-- 							<verbose>false</verbose> -->
-<!-- 						</configuration> -->
-<!-- 					</execution> -->
-<!-- 				</executions> -->
-<!-- 			</plugin> -->
-<!-- 			<plugin> -->
-<!-- 				<groupId>org.codehaus.mojo</groupId> -->
-<!-- 				<artifactId>build-helper-maven-plugin</artifactId>  -->
-<!-- 				<executions> -->
-<!-- 					<execution> -->
-<!-- 						<phase>generate-sources</phase> -->
-<!-- 						<goals> -->
-<!-- 							<goal>add-source</goal> -->
-<!-- 						</goals> -->
-<!-- 						<configuration> -->
-<!-- 							<sources> -->
-<!-- 								<source>target/generated-sources/java</source> -->
-<!-- 							</sources> -->
-<!-- 						</configuration> -->
-<!-- 					</execution> -->
-<!-- 				</executions> -->
-<!-- 			</plugin>	 -->
+			</plugin> 
 		</plugins>
 	</build>
-
 	<repositories>
 		<repository>
 			<id>spring-releases</id>
@@ -259,4 +182,33 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<profiles>
+	    <profile>
+			 <id>dev</id>
+			 <properties>
+				<docker.registry.name>localhost:5000/</docker.registry.name>
+			</properties> 
+		</profile>
+		<profile>
+			 <id>lab</id>
+			 <properties>
+				<docker.registry.name>172.21.3.105:5000/</docker.registry.name>
+				<docker.port>8161</docker.port>
+			</properties> 
+		</profile>
+		<profile>
+			 <id>staging</id>			 
+			 <properties>
+				<docker.registry.name>172.21.1.63:5000/</docker.registry.name>
+				<docker.port>8161</docker.port>
+			</properties> 
+		</profile>
+		<profile>
+			 <id>production</id>			 
+			 <properties>
+				<docker.registry.name>172.21.11.63:5000/</docker.registry.name>
+				<docker.port>8161</docker.port>
+			</properties> 
+		</profile>
+	</profiles>
 </project>    

@@ -7,9 +7,8 @@ package develop.odata.etl;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
  
-
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -32,20 +31,21 @@ public class MongoConfiguration extends AbstractMongoConfiguration {
 		return "roadevent";
 	}
 
-	@Value("${spring.data.mongodb.host}")
-	private String host;
-	
-	@Value("${spring.data.mongodb.port}")
-	private Integer port; 
+	@Value("${spring.data.mongodb.uri}")
+	private String uri;
+	 
 	
 	@Override
 	public Mongo mongo() throws Exception {
-		return new MongoClient(host, port);
+		//使用mongo replica-set或shard cluster會比較方便
+		return new MongoClient(new MongoClientURI(uri));
 	}
 	@Bean
 	public RestTemplate getRest() {
 		return new RestTemplate();
-	} 
+	}
+
+	 
 	
     
 	

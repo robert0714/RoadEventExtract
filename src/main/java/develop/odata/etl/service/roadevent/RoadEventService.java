@@ -347,7 +347,7 @@ public class RoadEventService {
 	 
 		Date startDate = DateUtils.truncate(new Date(), Calendar.DATE);
 		Date 	endDate = DateUtils.addSeconds(DateUtils.addDays(startDate, 1), -1);
-		List<develop.odata.etl.domain.roadevent.Record> tmpdata = repository.findByHappentimeBetweenOrderByHappentimeDesc( startDate,endDate);
+		List<develop.odata.etl.domain.roadevent.Record> tmpdata = repository.findByHappentimeBetween( startDate,endDate);
 		LOGGER.info("today size: {}" , tmpdata.size());
 		filterNormal(tmpdata);
 		LOGGER.info("After filtering ,today size: {}" , tmpdata.size());

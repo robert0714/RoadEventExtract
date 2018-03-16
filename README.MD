@@ -35,3 +35,8 @@ docker run -d --rm  -p 8161:8161  -e server.port=8161  -e TZ=Asia/Taipei  -e spr
   # 使用spring cloud ereka client
 docker run -d --net=host   -e server.port=8161  -e eureka.client.enabled=true   --name road   -e TZ=Asia/Taipei -e  eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka/      localhost:5000/robert0714/road-event-extract:2018-01-27
 <br/>
+
+
+  # 使用mongo replica-set
+docker run -d --net=host      --name road   -e TZ=Asia/Taipei -e    spring.data.mongodb.uri=mongodb://192.168.57.115:27017,192.168.57.116:27017  --add-host=db5:192.168.57.115  --add-host=db6:192.168.57.116    localhost:5000/robert0714/road-event-extract:2018-01-27
+<br/>
